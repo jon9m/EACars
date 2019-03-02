@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios';
 import CarShow from './CarShow';
+import { API_ENDPOINT } from './Config';
 
 class App extends Component {
 
@@ -11,8 +12,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    // axios.get('http://eacodingtest.digital.energyaustralia.com.au/api/v1/cars')
-    axios.get('cars.json')
+    axios.get(API_ENDPOINT)
       .then(response => {
         console.log(response.data);
         this.setState({ 'carshow': response.data });
