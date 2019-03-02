@@ -1,25 +1,54 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
+import axios from 'axios';
+import CarShow from './CarShow';
 
 class App extends Component {
+
+  state = {
+    carshow: [],
+    error: null
+  }
+
+  componentDidMount() {
+    // axios.get('http://eacodingtest.digital.energyaustralia.com.au/api/v1/cars')
+    axios.get('cars.json')
+      .then(response => {
+        console.log(response.data);
+        this.setState({ 'carshow': response.data });
+      })
+      .catch(err => {
+        console.log(err);
+        this.setState({ 'error': "Can't load data " + err });
+      });
+  }
+
   render() {
+    let error = (this.state.error ? this.state.error : null);
+    let carData = <div>No data available!</div>;
+    let carDataArr = this.state.carshow;
+
+    if (carDataArr && carDataArr.length > 0) {
+      let cars = [];
+      carDataArr.forEach(show => {
+        if (show.cars) {
+          show.cars.sort((car1, car2) => {
+            return car1.make > car2.make;
+          }).forEach(car => {
+            car.show = show.name;
+            cars.push(car);
+          });
+        }
+      });
+      console.log(cars);
+      return <CarShow cars={cars} />
+    } else if (error) {
+      return <div>{error}</div>;
+    }
+
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        {carData}
       </div>
     );
   }
