@@ -35,3 +35,30 @@
         Deploy    
             copy the content of build folder to a static web server        
             Access index.html file
+    --------------------------------------------------------------------------------------------------------
+
+    Using NgInx as a reverse proxy to bypass CORS
+        Edit src/Config.js 
+            API_ANDPOINT = '/api/v1/cars';
+    
+        Build React app - Method 3 above
+        copy the content of build folder to nginx_home/html/eacars
+            
+        NgInx server configuration
+            conf/nginx.conf
+                 location / {
+                    root   html/eacars;
+                    try_files $uri /index.html;		
+                }
+                location /api/v1/cars{
+                    proxy_pass http://eacodingtest.digital.energyaustralia.com.au/api/v1/cars;	
+                }
+                location ~ \.css {
+                        add_header  Content-Type    text/css;
+                }
+                location ~ \.js {
+                        add_header  Content-Type    application/x-javascript;
+                }	    
+        
+    
+    
