@@ -32,14 +32,17 @@ class App extends Component {
       let cars = [];
       carDataArr.forEach(show => {
         if (show.cars) {
-          show.cars.sort((car1, car2) => {
-            return car1.make > car2.make;
-          }).forEach(car => {
+          show.cars.forEach(car => {
             car.show = show.name;
             cars.push(car);
           });
         }
       });
+
+      cars.sort((car1, car2) => {
+        return car1.make > car2.make;
+      });
+
       console.log(cars);
       return <CarShow cars={cars} />
     } else if (error) {
